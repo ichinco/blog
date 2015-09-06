@@ -1,0 +1,47 @@
+---
+layout: post
+title: The power of assertion checking
+---
+
+I'd like to discuss what to do when you have a module of code that's 
+difficult to test and also low importance to test. These can be tough to 
+handle if there isn't already a test environment set up or if there's 
+resistance to spending time testing in general.
+
+I encountered this recently when building an internal tool that did
+performance evaluation of our main software. On the one hand, this is a 
+peripheral component for the company and not even publically facing. On
+the other, what's the point of building that tool if we can't trust
+its output? What makes it hard to test is that it's very tightly integrated
+with the output of the main software. It's almost meaningless to mock
+the output of the software because there are so many permutations to
+test. It occasionally changes completely as well, invalidating any
+integration you've already done with it.
+
+I thought about this problem for a while and finally remembered what
+I'd seen professional game developers do when I worked at QuickHit. They
+loathed unit tests, just didn't see the point. That didn't mean their 
+code was untested, however. Sprinkled throughout the code were "assertions" 
+that systematically checked that the state was as expected while the code
+was executing. You're probably familiar with assertions if you've done any
+unit testing at all: in Java, they look like "Assert.assertTrue("There
+must not be any items from the test group in the training group", trainingGroup.contains(testGroupItem))". If the value of the statement is false, an exception
+will be triggered with the text I supplied. 
+
+The downside was that when the code checked the assertions,
+it was less performant than if it hadn't been checking assertions. That
+meant that the code in production didn't run with assertion checking, which
+is where it would have been the most useful. It also
+required manual runs of the code for exercise and you could easily miss a
+case that would have triggered a specific assertion failure. So it wasn't
+without faults.
+
+In our case, those faults were less severe. We don't mind if our performance
+tester is slightly slower, since it runs offline. We also don't mind if 
+it fails in the midst of running: it would be far worse for it to complete
+successfully even though there was a problem that would cause us to doubt the
+output of the test. We basically want to do a "checksum" that checks the
+computation a second way, ensures that it passes, and lets the run continue.
+It's lightweight to build, automatic to run, and allows us to have
+confidence in our results. Perhaps there are downsides, but I haven't
+seen any yet!
