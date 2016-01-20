@@ -1,0 +1,35 @@
+---
+layout: post
+title: Using Bayes Rule to sort rated items
+---
+<p>Everyone knows that you can't order items straightforwardly by star-rating. The main problem is that you don't want something with only one 5 star rating to be ordered above something with 100 ratings averaging 4.85 stars. In other words, you want some balance of popularity and rating to push things toward the top.</p>
+
+<p>One solution to this is to apply Bayesian probability to the problem, as they do in <a href="http://fulmicoton.com/posts/bayesian_rating/">here</a> and <a href="http://www.evanmiller.org/bayesian-average-ratings.html">here</a>. Both of these take a somewhat literal read of Bayesian statistics and also obfuscate the solution by a complex description of the math behind it. I'd like to try to explain the intuition behind the math without starting at Bayes' rule. You'll just have to trust me.</p>
+
+<p>For the purpose of this example, let's say we're ordering movies. To start, we have to reframe the question. Instead of saying that we'll order by the average ranking, we should instead say that we will order by the most probable score. In order to calculate the most probable score, we'll use Bayes' Rule. </p>
+
+<p>The main idea of Bayes' rule is that you want to combine the prior and the likelihood to calculate the posterior which is the value you're interested. The posterior is the value you want to use to rank. The prior encapsulates what you already know about the problem even before you try to figure out the most probable score for a particular movie. The likelihood is where we put in information about how the specific movie did. The intuition is that with very few ratings, the posterior should look a lot like the prior -- or what you would say about a movie if you didn't know anything about it. As more people rate the movie, we have increasing confidence that the average rating (or likelihood) is correct so the posterior will be closer to the likelihood.</p>
+
+<p>At this point I'm just going to give you the calculation that gets derived at the end of these two great blog posts:</p>
+
+<p>
+N* R + ni * ri
+/ 
+N + ni
+</p>
+
+<ul>
+where
+<li>N = the total number of people who reviewed all the movies</li>
+<li>R is the average review score across all movies that've been reviewed</li>
+<li>ni = the number of people who reviewed this movie</li>
+<li>ri = the average review for this movie</li>
+</ul>
+
+<p>And if you look at the equation, it makes sense. If N, the number of people who have reviewed all the movies in your set, is very large, it will overpower ni, the number of people who have reviewed the specific movie and the rating will be closer to the average rating (NR / N). If ni is large, the average rating for that specific movie will dominate and the total will be closer to the average rating for the movie.</p>
+
+<p>For the prior -- that's the N and the R above -- people tend to think in terms of finding data that you already have about the population. So in this case, it would be the total number of people who've already reviewed all the movies and the average score given to all movies.</p>
+
+<p>But what if we thought instead about N and R as what we want the score for a movie to be if we don't have any other information about it. We want movies with no ratings to be low by default -- let's say a 4. So let's set R = 4. Then we have to decide how many ratings we think a movie should have before it is almost entirely dominated by its own average rating. In our case, I think 1000 is pretty good so I'll set N = 1000.</p>
+
+<p>In practice, this gives us the ratings we want. In order to rank lower than a movie with no ratings, a movie has to have a rating < 4. By using N = 1000, we get posteriors that look reasonable, as though our ranking mechanism were trying to "guess" the score.</p>
