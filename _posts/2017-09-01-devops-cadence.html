@@ -1,0 +1,70 @@
+---
+layout: post
+title: Developing a DevOps Cadence
+---
+
+<h2>Weekly team ops meeting<h2>
+
+<p>
+The purpose of the weekly ops meeting is to give the whole team a
+chance to take stock of their operational health. In theory, you could
+cover all this ground in the handoff meeting with only the old and the
+new on-call present. I recommend against this.
+</p>
+
+<p>
+The reason for this is that the weekly operations meeting prevents
+your handoff meeting from being an long chain of telephone between the
+members of the rotation. “Last week Joe told me that Mary had had some
+trouble with the servers but they seem to be doing fine now,” etc. It
+also gives the more senior members of your team the opportunity to
+audit and provide suggestions.
+</p>
+
+<p>
+Here’s the cadence of a typical (half hour) team operations meeting:
+</p>
+
+<ul>
+<li>Previous on-call engineer runs the meeting. New on-call takes action items.</li>
+<li>Previous on-call engineer presents write-up summarizing issues from the last on-call. Were there new issues that came up? What did he or she do to fix them? This is the part where you find out that your latency’s been increasing for months and people have just been moving the alarm.</li>
+<li>Quick review of existing tickets. Are there any tickets that are over SLA?</li>
+<li>Dashboards. Pull open the dashboards for your services. Does anything look abnormal? (If so: there should be an action item to investigate). This is the part where your team learns what looks normal on their dashboards. You don’t want the first time they see the dashboard to be during an issue. Look for sudden changes, spikes, trends.</li>
+</ul>
+<h2>Handoff meeting</h2>
+
+<p>
+The handoff is attended by the old on-call, the new on-call, and the
+on-call manager or team lead. The purpose of the meeting is to make
+sure that the new on-call has all of the context that the old on-call
+had. You can think of this meeting as a changing of the guard.
+</p>
+
+<p>
+Like changing of the guard, the old on-call must continue to be
+watchful until he or she has received confirmation that the new
+on-call is on alert.
+</p>
+
+<p>
+Here are some common items for a handoff meeting:
+</p>
+
+<ul>
+<li>Page the new on-call. This ensures that the new on-call’s pager is configured correctly and that nothing has changed since the last time they were on-call.</li>
+<li>Review all existing tickets in the ticket queue. Give an update on the status of each individual ticket. Where no correspondence has been added, it should be updated now.</li>
+<li>Where appropriate, off-load tickets from the on-call queue into ordinary sprint or team work.</li>
+</ul>
+
+<h2>Weekly org ops meeting</h2>
+<p>The purpose of this meeting is two-fold: it helps distribute knowledge between teams, and it helps enforce an operational culture org-wide.</p>
+
+<p>Here’s the cadence of a typical weekly org ops meeting: </p>
+
+<ul>
+<li>Announcements. Things that went well; things that went poorly. Events that are coming up.</li>
+<li>Recent org-wide operational issues. Quick review of the incident and follow-up.</li>
+<li>Review of org-wide open issues/follow-up items that are out of SLA. The person who owns these items should provide a brief update on the status.</li>
+<li>Review of a recent incident. Brief discussion of lessons learned, suggestions from the rest of the org.</li>
+<li>Spin the wheel. Choose a random team’s dashboard. The should present, explaining any anomalies that appear. They should also explain the alarm level.</li>
+</ul>
